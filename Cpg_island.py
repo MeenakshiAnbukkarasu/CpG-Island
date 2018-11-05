@@ -12,11 +12,11 @@ of future state(s) depends only on the current process state and not on any the 
 that preceded it (shocker).
 
 Let's get into a simple example. Assume you want to model the future probability that 
-your dog is in one of three states given its current state. To do this we need to 
+you land in a CpG island given its current state. To do this we need to 
 specify the state space, the initial probabilities, and the transition probabilities.
 
-Imagine you have a very lazy fat dog, so we define the state space as sleeping, eating, 
-or pooping. We will set the initial probabilities to 35%, 35%, and 30% respectively.
+Imagine you have a DNA sequence. We define the state space as the four diffent bases A,T,C and G. 
+We will set the initial probabilities to 0.25%, 0.25%, 0.25% and 0.25% respectively.
 """
 
 # create state space and initial state probabilities
@@ -43,7 +43,7 @@ Now that we have the initial and transition probabilities setup we can create a
 Markov diagram using the Networkx package.
 
 To do this requires a little bit of flexible thinking. Networkx creates Graphs 
-that consist of nodes and edges. In our toy example the dog's possible states are 
+that consist of nodes and edges. In our example the possible states are 
 the nodes and the edges are the lines that connect the nodes. The transition 
 probabilities are the weights. They represent the probability of transitioning 
 to a state given the current state.
@@ -98,15 +98,14 @@ nx.drawing.nx_pydot.write_dot(G, 'cpg_markov.dot')
 
 
 """
-Consider a situation where your dog is acting strangely and you wanted to model 
-the probability that your dog's behavior is due to sickness or simply quirky 
-behavior when otherwise healthy.
+Lets us assume that you are traversing through the DNA sequence.
+Consider a situation you encounter more CpG pairs along the DNA and you wanted to model 
+the probability of you landing in a CpG island
 
-In this situation the true state of the dog is unknown, thus hidden from you. 
-One way to model this is to assume that the dog has observable behaviors that 
-represent the true, hidden state. Let's walk through an example.
+In this situation the true state of the sequence is unknown, thus hidden from you. 
+One way to model this is to assume hidden state. Let's walk through an example.
 
-First we create our state space - healthy or sick. We assume they are equiprobable.  
+First we create our state space - CpG or Not-Cpg. We assume they are equiprobable.  
 """
 
 # create state space and initial state probabilities
@@ -127,15 +126,14 @@ a_df.loc[hidden_states[1]] = [0.4, 0.6]
 a = a_df.values
 
 """
-This is where it gets a little more interesting. Now we create the emission or 
-observation probability matrix. This matrix is size M x O where M is the number 
+Now we create the emission or observation probability matrix. This matrix is size M x O where M is the number 
 of hidden states and O is the number of possible observable states. 
 
-The emission matrix tells us the probability the dog is in one of the hidden 
+The emission matrix tells us the probability that we are in one of the hidden 
 states, given the current, observable state. 
 
-Let's keep the same observable states from the previous example. The dog can be 
-either sleeping, eating, or pooping. For now we make our best guess to fill in 
+Let's keep the same observable states from the previous example. We can be in
+either A, T,C or G. For now we make our best guess to fill in 
 the probabilities. 
 """
 
@@ -228,16 +226,10 @@ def viterbi(pi, a, b, obs_seq):
     return path, delta, phi
 
 """
-The hidden Markov graph is a little more complex but the principles are the same. 
-For example, you would expect that if your dog is eating there is a high 
-probability that it is healthy (60%) and a very low probability that the dog is 
-sick (10%).
-
-Now, what if you needed to discern the health of your dog over time given a 
-sequence of observations?  
+ 
 """
 
-# observation sequence of dog's behaviors
+# observation sequence of DNA
 # observations are encoded numerically
 
 
